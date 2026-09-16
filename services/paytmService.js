@@ -1,4 +1,4 @@
-// services/paytmService.js
+﻿// services/paytmService.js
 //
 // Mirrors fampayService.js's verifyPayment shape, but for Paytm. FamPay
 // has no official merchant API, so its verifyPayment scrapes a connected
@@ -86,11 +86,11 @@ const verifyPayment = async (orderId) => {
 
       const walletService = require('./walletService');
 
-      // NOTE: unlike FamPay, Paytm has no ZapPay-pooled/system_cashier path —
+      // NOTE: unlike FamPay, Paytm has no ZetPay-pooled/system_cashier path —
       // every Paytm order is verified against THIS merchant's own connected
       // MID (line 39 above), meaning the money always already lands directly
       // in the merchant's own Paytm account. Crediting it again to the
-      // ZapPay wallet would be a duplicate the merchant could then withdraw
+      // ZetPay wallet would be a duplicate the merchant could then withdraw
       // on top of money they already have — the same double-payout risk as
       // genuine 'cashier' routing in fampayService.js. So Paytm orders never
       // credit Zap Cash; only the Zap Credit commission below applies.

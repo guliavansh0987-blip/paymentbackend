@@ -1,10 +1,10 @@
-// services/apiTokenService.js - ZapAPI Developer Token Management
+﻿// services/apiTokenService.js - ZapAPI Developer Token Management
 //
-// Lets a ZapPay merchant accept payments on THEIR OWN website/app using a
-// token issued by ZapPay itself — a "ZapAPI" key — the same way ZapPay
+// Lets a ZetPay merchant accept payments on THEIR OWN website/app using a
+// token issued by ZetPay itself — a "ZapAPI" key — the same way ZetPay
 // accepts payments using Zap UPI Gateway's own "ZAPKEY".
-//   ZapUpi  -> ZAPKEY  (ZapPay is the merchant, calling Zap UPI Gateway)
-//   ZapPay  -> ZAPAPI  (a ZapPay user is the merchant, calling ZapPay)
+//   ZapUpi  -> ZAPKEY  (ZetPay is the merchant, calling Zap UPI Gateway)
+//   ZetPay  -> ZAPAPI  (a ZetPay user is the merchant, calling ZetPay)
 //
 // One active key per user. Regenerating immediately invalidates the old
 // one (the reverse-lookup index entry is deleted before the new one is

@@ -1,4 +1,4 @@
-// controllers/paymentLinkController.js
+﻿// controllers/paymentLinkController.js
 const { body, validationResult } = require('express-validator');
 const { ref } = require('../firebase/admin');
 const zapService = require('../services/zapService');
@@ -278,7 +278,7 @@ const initiatePayment = async (req, res) => {
       // Mirrors system_cashier's own default exactly, so both routes behave
       // the same when the merchant hasn't set a custom redirectUrl.
       const safeRedirect = link.redirectUrl || `${process.env.FRONTEND_URL}/pay.html?id=${linkId}&order=${orderId}&result=success`;
-      let checkoutUrl = `https://zappay.shop/checkout.html?order_id=${orderId}&amount=${link.amount}&upi=${encodeURIComponent(merchantUser.fampay.upiId)}&redirect_url=${encodeURIComponent(safeRedirect)}`;
+      let checkoutUrl = `https://zetpay.online/checkout.html?order_id=${orderId}&amount=${link.amount}&upi=${encodeURIComponent(merchantUser.fampay.upiId)}&redirect_url=${encodeURIComponent(safeRedirect)}`;
       checkoutUrl += `&theme=${encodeURIComponent(merchantUser?.checkoutTheme || 'default')}`;
       if (merchantUser?.checkoutThemeColor) checkoutUrl += `&color=${encodeURIComponent(merchantUser.checkoutThemeColor)}`;
       return response.success(res, 'Payment initiated via Cashier', { paymentUrl: checkoutUrl, orderId, amount: link.amount, isTest: false, method: 'cashier' });
@@ -304,7 +304,7 @@ const initiatePayment = async (req, res) => {
 
     if (isSystemCashier) {
       const safeRedirect = `${process.env.FRONTEND_URL}/pay.html?id=${linkId}&order=${orderId}&result=success`;
-      let checkoutUrl = `https://zappay.shop/checkout.html?order_id=${orderId}&amount=${link.amount}&upi=${encodeURIComponent(sysAdminUser.fampay.upiId)}&redirect_url=${encodeURIComponent(safeRedirect)}`;
+      let checkoutUrl = `https://zetpay.online/checkout.html?order_id=${orderId}&amount=${link.amount}&upi=${encodeURIComponent(sysAdminUser.fampay.upiId)}&redirect_url=${encodeURIComponent(safeRedirect)}`;
       checkoutUrl += `&theme=${encodeURIComponent(merchantUser?.checkoutTheme || 'default')}`;
       if (merchantUser?.checkoutThemeColor) checkoutUrl += `&color=${encodeURIComponent(merchantUser.checkoutThemeColor)}`;
       return response.success(res, 'Payment initiated via System Cashier', { paymentUrl: checkoutUrl, orderId, amount: link.amount, isTest: false, method: 'system_cashier' });

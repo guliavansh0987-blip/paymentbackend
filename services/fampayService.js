@@ -1,4 +1,4 @@
-// services/fampayService.js
+﻿// services/fampayService.js
 const imapService         = require('./imapService');
 const { parseTxnDatetime } = imapService;
 const firebaseService     = require('./firebaseService');
@@ -89,16 +89,16 @@ const verifyPayment = async (orderId) => {
         // storeController/developerController/subscriptionController for
         // where each is set).
         //
-        // - system_cashier: ZapPay's own pooled FamPay collects the money —
-        //   it genuinely passes through ZapPay, so it must be credited to
+        // - system_cashier: ZetPay's own pooled FamPay collects the money —
+        //   it genuinely passes through ZetPay, so it must be credited to
         //   the merchant's Zap Cash wallet (capped at walletLimit).
-        // - wallet: same — money genuinely lands in a ZapPay-controlled
+        // - wallet: same — money genuinely lands in a ZetPay-controlled
         //   account, so it's credited the same way.
         // - cashier: the merchant's OWN connected FamPay account collects
         //   the money directly — it's already sitting in their own FamPay/
-        //   bank, never touching ZapPay. Crediting Zap Cash here would be a
+        //   bank, never touching ZetPay. Crediting Zap Cash here would be a
         //   real duplicate: the merchant would have the money in their own
-        //   account AND a matching ZapPay wallet balance they could then
+        //   account AND a matching ZetPay wallet balance they could then
         //   withdraw — a double-payout. So 'cashier' must NEVER credit
         //   Zap Cash; only the Zap Credit commission below applies, and
         //   incrementPaymentLinkStats (for the Paid-count/collected total)

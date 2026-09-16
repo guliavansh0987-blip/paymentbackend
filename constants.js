@@ -1,4 +1,4 @@
-// config/constants.js - Application Constants
+﻿// config/constants.js - Application Constants
 
 module.exports = {
   ROLES: {
@@ -95,7 +95,7 @@ module.exports = {
     minWithdrawal: 100,
     commissionPercent: 5,
     maintenanceMode: false,
-    siteName: 'ZapPay',
+    siteName: 'ZetPay',
     supportEmail: 'support@zappay.in',
     // Referral program
     signupBonus: 100,                   // ₹ credited to a NEW user who signs up via a referral link

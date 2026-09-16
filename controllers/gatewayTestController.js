@@ -1,4 +1,4 @@
-// controllers/gatewayTestController.js - Gateway Test Mode simulator
+﻿// controllers/gatewayTestController.js - Gateway Test Mode simulator
 //
 // Backs test.html. When a merchant has switched their account to Test
 // Mode, developerController.createOrder and paymentLinkController's
@@ -10,7 +10,7 @@
 // Both endpoints are public/unauthenticated by design, same as
 // getLinkPublic/getLinkOrderStatus — the person hitting test.html is a
 // merchant's own customer (or the merchant themselves while integrating),
-// never a logged-in ZapPay dashboard user. Safety instead comes from
+// never a logged-in ZetPay dashboard user. Safety instead comes from
 // scoping: every lookup below requires payment.isTest === true, so this
 // code can never read or touch a real, live order no matter what orderId
 // is passed in.
@@ -39,7 +39,7 @@ function buildRedirectUrl(payment, result) {
   }
 
   // Store Portal purchase -> back to the SAME storefront page the
-  // customer bought from (root/store/index.html, zappay.shop/store=<id>),
+  // customer bought from (root/store/index.html, zetpay.online/store=<id>),
   // not pay.html or the merchant dashboard — it re-verifies via
   // getOrderStatus itself before showing the product's delivery link,
   // same safety principle as the pay.html path. Lives on the root domain,
@@ -105,7 +105,7 @@ const getTestOrder = async (req, res) => {
       return response.notFound(res, 'Test order not found. It may have expired or this link was already used.');
     }
 
-    let merchantName = 'ZapPay Merchant';
+    let merchantName = 'ZetPay Merchant';
     if (payment.linkId) {
       const linkSnap = await ref(`${DB_PATHS.PAYMENT_LINKS}/${payment.linkId}`).once('value');
       if (linkSnap.exists() && linkSnap.val().merchantName) merchantName = linkSnap.val().merchantName;
@@ -117,7 +117,7 @@ const getTestOrder = async (req, res) => {
     return response.success(res, 'Test order fetched', {
       orderId,
       amount: payment.amount,
-      title: payment.remark || 'ZapPay Payment',
+      title: payment.remark || 'ZetPay Payment',
       merchantName,
       status: payment.status, // 'pending' | 'success' | 'failed'
       testResult: payment.testResult || null,

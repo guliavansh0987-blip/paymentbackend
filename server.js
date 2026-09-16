@@ -1,4 +1,4 @@
-// server.js - ZapPay Backend
+﻿// server.js - ZetPay Backend
 require('dotenv').config();
 const express = require('express');
 const cors    = require('cors');
@@ -54,7 +54,7 @@ app.use(helmet({ crossOriginEmbedderPolicy: false, contentSecurityPolicy: false 
 // slash). A mismatch here causes fetch() to fail with a generic, unhelpful
 // "Failed to fetch" — the browser hides the real CORS reason from JS.
 const normalizeOrigin = (o) => (o || '').trim().toLowerCase().replace(/\/+$/, '');
-// "www.zappay.shop" and "zappay.shop" are the same site to a visitor, but
+// "www.zetpay.online" and "zetpay.online" are the same site to a visitor, but
 // FRONTEND_URL only ever holds one spelling — whichever one a browser's
 // Origin header doesn't match gets silently CORS-rejected, which is what
 // broke the site when Google indexed/linked the www version but
@@ -120,7 +120,7 @@ const OPEN_CORS_PATHS = [
   /^\/api\/developer\/public-order-status\//,
   /^\/api\/gateway-test\//,
   // Store Portal storefront (root/store/index.html) now lives on the root
-  // domain (zappay.shop), not the panel subdomain FRONTEND_URL points at.
+  // domain (zetpay.online), not the panel subdomain FRONTEND_URL points at.
   // Same reasoning as gateway-test above: public, no auth, no cookies —
   // opening the origin here doesn't widen the dashboard's own attack
   // surface, and it means the storefront keeps working regardless of what
@@ -135,7 +135,7 @@ const OPEN_CORS_PATHS = [
   // posts manual UTR verification directly — same situation as
   // store-public/gateway-test/otp above: public, no login, no cookies,
   // and it needs to work regardless of what FRONTEND_URL is set to since
-  // checkout.html is served from zappay.shop, not the panel subdomain.
+  // checkout.html is served from zetpay.online, not the panel subdomain.
   // Without this, every fetch() from checkout.html to these two routes
   // was silently CORS-rejected by the browser — surfacing in the UI as
   // "Error connecting to verification server" / a poll that never
@@ -165,7 +165,7 @@ app.use('/api/', generalLimiter);
 
 // ── Health Check (no Firebase needed) ──
 app.get('/', (req, res) => {
-  res.json({ name: 'ZapPay API', version: '1.0.0', status: 'running' });
+  res.json({ name: 'ZetPay API', version: '1.0.0', status: 'running' });
 });
 
 app.get('/api/health', (req, res) => {
@@ -213,7 +213,7 @@ const PORT = process.env.PORT || 3000;
 if (require.main === module || process.env.NODE_ENV !== 'production') {
   // Local development only
   app.listen(PORT, () => {
-    logger.info(`🚀 ZapPay running on http://localhost:${PORT}`);
+    logger.info(`🚀 ZetPay running on http://localhost:${PORT}`);
   });
 }
 // In production (Vercel), the exported `app` is used directly as the

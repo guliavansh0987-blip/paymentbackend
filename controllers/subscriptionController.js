@@ -1,4 +1,4 @@
-// controllers/subscriptionController.js
+﻿// controllers/subscriptionController.js
 const subscriptionService = require('../services/subscriptionService');
 const firebaseService     = require('../services/firebaseService');
 const walletService       = require('../services/walletService');
@@ -145,7 +145,7 @@ const purchasePlan = async (req, res) => {
     await firebaseService.createPayment(orderId, {
       userId,
       amount: pricing.finalPrice,
-      remark: `ZapPay Subscription - ${plan.name} - ${pricing.months} mo`,
+      remark: `ZetPay Subscription - ${plan.name} - ${pricing.months} mo`,
       type: 'subscription',
       planId: plan.id,
       durationMonths: pricing.months,
@@ -160,7 +160,7 @@ const purchasePlan = async (req, res) => {
         // Same comma-separated FRONTEND_URL caveat as elsewhere — take only the first origin.
         const frontendUrl = (process.env.FRONTEND_URL || '').split(',')[0].trim().replace(/\/+$/, '');
         const dashboardRedir = `${frontendUrl}/index.html?payment=success&order=${orderId}`;
-        const checkoutUrl = `https://zappay.shop/checkout.html?order_id=${orderId}&amount=${pricing.finalPrice}&upi=${encodeURIComponent(sysAdminUser.fampay.upiId)}&redirect_url=${encodeURIComponent(dashboardRedir)}`;
+        const checkoutUrl = `https://zetpay.online/checkout.html?order_id=${orderId}&amount=${pricing.finalPrice}&upi=${encodeURIComponent(sysAdminUser.fampay.upiId)}&redirect_url=${encodeURIComponent(dashboardRedir)}`;
         
         logger.info(`Subscription order (System Cashier): ${orderId} user=${userId}`);
         
@@ -177,7 +177,7 @@ const purchasePlan = async (req, res) => {
     const zapOrder = await zapService.createOrder({
       orderId,
       amount: String(pricing.finalPrice.toFixed(2)),
-      remark: `ZapPay ${plan.name} Plan - ${pricing.months} mo`,
+      remark: `ZetPay ${plan.name} Plan - ${pricing.months} mo`,
     });
 
     logger.info(`Subscription order: ${orderId} user=${userId} plan=${planId} months=${pricing.months} amount=${pricing.finalPrice}`);
@@ -282,7 +282,7 @@ const purchasePlanWithWallet = async (req, res) => {
     await firebaseService.createPayment(orderId, {
       userId,
       amount: pricing.finalPrice,
-      remark: `ZapPay Subscription - Wallet - ${plan.name} - ${pricing.months} mo`,
+      remark: `ZetPay Subscription - Wallet - ${plan.name} - ${pricing.months} mo`,
       type: 'subscription',
       planId: plan.id,
       durationMonths: pricing.months,

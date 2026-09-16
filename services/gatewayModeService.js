@@ -1,4 +1,4 @@
-// services/gatewayModeService.js - ZapPay Gateway Test Mode / Live Mode
+﻿// services/gatewayModeService.js - ZetPay Gateway Test Mode / Live Mode
 //
 // A merchant can flip their account between LIVE (real Zap UPI Gateway, real
 // money) and TEST (simulated checkout via test.html, no real money ever
@@ -54,12 +54,12 @@ function getFrontendBase() {
  * Base URL that hosts the public storefront (root/store/index.html) —
  * deliberately NOT the same as FRONTEND_URL. FRONTEND_URL points at the
  * panel subdomain that serves pay.html/link.html; the storefront lives on
- * the root marketing domain instead (customer-facing, clean "zappay.shop"
+ * the root marketing domain instead (customer-facing, clean "zetpay.online"
  * link). Override with STORE_URL if that ever needs to change; defaults to
  * the production root domain so nothing breaks if the env var is unset.
  */
 function getStoreBase() {
-  const raw = process.env.STORE_URL || 'https://zappay.shop';
+  const raw = process.env.STORE_URL || 'https://zetpay.online';
   return raw.split(',')[0].trim().replace(/\/+$/, '');
 }
 

@@ -1,4 +1,4 @@
-// controllers/paymentController.js - Payment Controller
+﻿// controllers/paymentController.js - Payment Controller
 const { body, validationResult } = require('express-validator');
 const zapService = require('../services/zapService');
 const firebaseService = require('../services/firebaseService');
@@ -64,7 +64,7 @@ const createOrder = async (req, res) => {
     // Include userId in remark for webhook tracking
     const fullRemark = remark
       ? `${remark} | ${userId}`
-      : `ZapPay | ${userId}`;
+      : `ZetPay | ${userId}`;
 
     let isSystemCashier = false;
     let sysAdminUser = null;
@@ -93,7 +93,7 @@ const createOrder = async (req, res) => {
         // Same comma-separated FRONTEND_URL caveat as elsewhere — take only the first origin.
         const frontendUrl = (process.env.FRONTEND_URL || '').split(',')[0].trim().replace(/\/+$/, '');
         const dashboardRedir = `${frontendUrl}/index.html?payment=success&order=${orderId}`;
-        const checkoutUrl = `https://zappay.shop/checkout.html?order_id=${orderId}&amount=${amount}&upi=${encodeURIComponent(sysAdminUser.fampay.upiId)}&redirect_url=${encodeURIComponent(dashboardRedir)}`;
+        const checkoutUrl = `https://zetpay.online/checkout.html?order_id=${orderId}&amount=${amount}&upi=${encodeURIComponent(sysAdminUser.fampay.upiId)}&redirect_url=${encodeURIComponent(dashboardRedir)}`;
         
         logger.info(`System Cashier topup order created: ${orderId} by user ${userId} for ₹${amount}`);
         

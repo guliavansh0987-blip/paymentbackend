@@ -1,8 +1,8 @@
-// services/webhookService.js
+﻿// services/webhookService.js
 // Lets a merchant register one or more of THEIR OWN server URLs to be
 // notified (via an outgoing POST) whenever one of their orders changes
 // status — "Order pending" (created) and "Order success/failed" (settled).
-// This is separate from ZapPay's own incoming webhook (webhooks/zapWebhook.js,
+// This is separate from ZetPay's own incoming webhook (webhooks/zapWebhook.js,
 // which receives FROM the upstream ZapUPI gateway) — this service SENDS
 // OUT to the merchant's own infrastructure instead.
 const crypto = require('crypto');
@@ -118,9 +118,9 @@ async function notifyUserWebhooks(uid, event, payload) {
     try {
       await axios.post(hook.url, body, {
         timeout: DELIVERY_TIMEOUT_MS,
-        headers: { 'Content-Type': 'application/json', 'User-Agent': 'ZapPay-Webhook/1.0' },
+        headers: { 'Content-Type': 'application/json', 'User-Agent': 'ZetPay-Webhook/1.0' },
         // Any 2xx counts as delivered; anything else (4xx/5xx) is a failed
-        // delivery from ZapPay's point of view — don't throw for those,
+        // delivery from ZetPay's point of view — don't throw for those,
         // classify them below instead of letting axios reject on non-2xx.
         validateStatus: () => true,
       }).then(async (res) => {

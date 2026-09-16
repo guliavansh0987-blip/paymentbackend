@@ -1,4 +1,4 @@
-// services/zapService.js - Zap UPI Gateway API Service
+﻿// services/zapService.js - Zap UPI Gateway API Service
 // CRITICAL: This file must NEVER be exposed to frontend
 const axios = require('axios');
 const logger = require('../utils/logger');
@@ -8,7 +8,7 @@ const ZAP_KEY = process.env.ZAP_KEY;
 
 // FRONTEND_URL may now hold a comma-separated list (server.js's CORS
 // allowlist splits on ',' to support multiple live domains during a
-// domain migration, e.g. "https://zappay.page.gd,https://zappay.shop").
+// domain migration, e.g. "https://zappay.page.gd,https://zetpay.online").
 // The default redirect URLs below need a SINGLE origin, not the raw
 // comma-joined value — take the first one, which should be the current
 // primary/production domain.
@@ -22,7 +22,7 @@ const PRIMARY_FRONTEND_URL = (process.env.FRONTEND_URL || '').split(',')[0].trim
  * collapses whitespace, and falls back to a safe default if empty.
  */
 function sanitizeRemark(text) {
-  if (!text) return 'ZapPay Payment';
+  if (!text) return 'ZetPay Payment';
   const cleaned = String(text)
     .replace(/[^\x20-\x7E]/g, '')      // strip emoji & all non-ASCII chars
     .replace(/[^a-zA-Z0-9 .,\-_|:]/g, '') // keep only safe punctuation — NOT parentheses: the
@@ -33,7 +33,7 @@ function sanitizeRemark(text) {
                                            // had a "(...)" segment
     .replace(/\s+/g, ' ')
     .trim();
-  return (cleaned || 'ZapPay Payment').slice(0, 50);
+  return (cleaned || 'ZetPay Payment').slice(0, 50);
 }
 
 /**

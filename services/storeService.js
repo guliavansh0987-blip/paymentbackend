@@ -1,4 +1,4 @@
-// services/storeService.js - Store Portal data layer
+﻿// services/storeService.js - Store Portal data layer
 //
 // Every merchant gets ONE store (auto-created on first touch of Store
 // Portal) holding: settings (name/logo/theme/social links) + an unlimited
@@ -40,7 +40,7 @@ async function getOrCreateSettings(uid) {
 
   const defaults = {
     storeId,
-    storeName: 'ZapPay Store',
+    storeName: 'ZetPay Store',
     logoUrl: DEFAULT_LOGO_URL,
     theme: 'boutique',
     socialLinks: { telegram: '', whatsapp: '', youtube: '', instagram: '' },
@@ -73,7 +73,7 @@ async function updateSettings(uid, data) {
 
   if (data.storeName !== undefined) {
     const name = String(data.storeName).trim().slice(0, 60);
-    updates.storeName = name || 'ZapPay Store';
+    updates.storeName = name || 'ZetPay Store';
   }
   if (data.logoUrl !== undefined) {
     const url = String(data.logoUrl).trim().slice(0, 500);

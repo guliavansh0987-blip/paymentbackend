@@ -1,7 +1,7 @@
-// middleware/apiKeyAuth.js - ZapAPI Key Authentication Middleware
+﻿// middleware/apiKeyAuth.js - ZapAPI Key Authentication Middleware
 //
 // Authenticates requests made by a MERCHANT'S OWN site/app/server using
-// their ZapPay-issued "ZapAPI" key (see services/apiTokenService.js).
+// their ZetPay-issued "ZapAPI" key (see services/apiTokenService.js).
 // Accepts the key either in the request body (`zap_api`) or in the
 // `X-ZapAPI-Key` header — matching the same lookup order `apiKeyLimiter`
 // uses in middleware/rateLimiter.js, so the rate-limit bucket and the

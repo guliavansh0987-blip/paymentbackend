@@ -1,4 +1,4 @@
-// controllers/storeController.js - Store Portal (merchant-facing, JWT auth)
+﻿// controllers/storeController.js - Store Portal (merchant-facing, JWT auth)
 // Everything here is scoped to req.user.uid — a merchant can only ever
 // read/write their OWN store settings and products through these routes.
 // The public storefront (store.html) talks to storePublicController
@@ -150,7 +150,7 @@ const initiateUnlockUpi = async (req, res) => {
     await firebaseService.createPayment(orderId, {
       userId: uid,
       amount: STORE_UNLOCK_PRICE,
-      remark: 'ZapPay Store Unlock (One-Time)',
+      remark: 'ZetPay Store Unlock (One-Time)',
       type: 'store_unlock',
       routingEngine: isSystemCashier ? 'system_cashier' : 'wallet',
       paymentMethod: isSystemCashier ? 'fampay' : 'zapupi',
@@ -167,7 +167,7 @@ const initiateUnlockUpi = async (req, res) => {
 
     if (isSystemCashier) {
         const safeRedirect = `${DASH}/index.html?storeUnlock=success&order=${orderId}`;
-        const checkoutUrl = `https://zappay.shop/checkout.html?order_id=${orderId}&amount=${STORE_UNLOCK_PRICE}&upi=${encodeURIComponent(sysAdminUser.fampay.upiId)}&redirect_url=${encodeURIComponent(safeRedirect)}`;
+        const checkoutUrl = `https://zetpay.online/checkout.html?order_id=${orderId}&amount=${STORE_UNLOCK_PRICE}&upi=${encodeURIComponent(sysAdminUser.fampay.upiId)}&redirect_url=${encodeURIComponent(safeRedirect)}`;
         logger.info(`Store unlock order created (System Cashier): ${orderId}`);
         return response.success(res, 'Payment order created', {
             orderId: orderId,
@@ -179,7 +179,7 @@ const initiateUnlockUpi = async (req, res) => {
     const zapOrder = await zapService.createOrder({
       orderId,
       amount: String(STORE_UNLOCK_PRICE.toFixed(2)),
-      remark: 'ZapPay Store Unlock',
+      remark: 'ZetPay Store Unlock',
       successUrl: `${DASH}/index.html?storeUnlock=success&order=${orderId}`,
       failedUrl:  `${DASH}/index.html?storeUnlock=failed&order=${orderId}`,
       timeoutUrl: `${DASH}/index.html?storeUnlock=failed&order=${orderId}`,
@@ -226,7 +226,7 @@ const unlockViaWallet = async (req, res) => {
     await firebaseService.createPayment(orderId, {
       userId: uid,
       amount: STORE_UNLOCK_PRICE,
-      remark: 'ZapPay Store Unlock (Wallet)',
+      remark: 'ZetPay Store Unlock (Wallet)',
       type: 'store_unlock',
     });
     await firebaseService.updatePaymentStatus(orderId, {
@@ -235,7 +235,7 @@ const unlockViaWallet = async (req, res) => {
 
     await notificationService.createNotification(uid, {
       title: '🎉 Store Unlocked!',
-      message: 'Your ZapPay Store is now unlocked — customize it and start selling!',
+      message: 'Your ZetPay Store is now unlocked — customize it and start selling!',
       type: 'general',
     });
     await firebaseService.logActivity(uid, 'STORE_UNLOCKED_WALLET', { amount: STORE_UNLOCK_PRICE });

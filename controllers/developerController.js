@@ -1,4 +1,4 @@
-// controllers/developerController.js - ZapAPI Developer Platform
+﻿// controllers/developerController.js - ZapAPI Developer Platform
 const { body, validationResult } = require('express-validator');
 const { ref } = require('../firebase/admin');
 const { DB_PATHS } = require('../config/constants');
@@ -124,7 +124,7 @@ const createOrder = async (req, res) => {
     const { amount, title, customer_mobile, redirect_url, useEmbedded, routingEngine } = req.body;
     const amt = parseFloat(amount);
     const orderId = zapService.generateOrderId(userId);
-    const remark = title || 'ZapPay Payment';
+    const remark = title || 'ZetPay Payment';
 
     const gatewayMode = await gatewayModeService.getMode(userId);
 
@@ -144,7 +144,7 @@ const createOrder = async (req, res) => {
     const sub = await subscriptionService.getUserSubscription(userId);
     const balance = await walletService.getBalance(userId);
     if (balance + amt > sub.plan.walletLimit) {
-      return response.error(res, 'Your ZapPay wallet is full. Upgrade your plan or withdraw first.');
+      return response.error(res, 'Your ZetPay wallet is full. Upgrade your plan or withdraw first.');
     }
 
     // ─── Zap Credit gate ─────────────────────────────────────────
@@ -192,7 +192,7 @@ const createOrder = async (req, res) => {
       });
 
       const upiIdToUse = merchantUser?.paytm?.upiId || '';
-      let checkoutUrl = `https://zappay.shop/checkout.html?order_id=${orderId}&amount=${amt}&upi=${encodeURIComponent(upiIdToUse)}&method=paytm&txn_ref=${encodeURIComponent(paytmTxnRef)}`;
+      let checkoutUrl = `https://zetpay.online/checkout.html?order_id=${orderId}&amount=${amt}&upi=${encodeURIComponent(upiIdToUse)}&method=paytm&txn_ref=${encodeURIComponent(paytmTxnRef)}`;
       checkoutUrl += `&theme=${encodeURIComponent(merchantUser?.checkoutTheme || 'default')}`;
       if (merchantUser?.checkoutThemeColor) checkoutUrl += `&color=${encodeURIComponent(merchantUser.checkoutThemeColor)}`;
       if (redirect_url) {
@@ -212,7 +212,7 @@ const createOrder = async (req, res) => {
       await firebaseService.createPayment(orderId, { userId, amount: amt, remark, customerMobile: customer_mobile || '', type: 'api', routingEngine: 'cashier', paymentMethod: 'fampay', status: 'pending', commissionPercent });
       
       const upiIdToUse = merchantUser?.fampay?.upiId || merchantUser?.upiId || ''; 
-      let checkoutUrl = `https://zappay.shop/checkout.html?order_id=${orderId}&amount=${amt}&upi=${encodeURIComponent(upiIdToUse)}`;
+      let checkoutUrl = `https://zetpay.online/checkout.html?order_id=${orderId}&amount=${amt}&upi=${encodeURIComponent(upiIdToUse)}`;
       checkoutUrl += `&theme=${encodeURIComponent(merchantUser?.checkoutTheme || 'default')}`;
       if (merchantUser?.checkoutThemeColor) checkoutUrl += `&color=${encodeURIComponent(merchantUser.checkoutThemeColor)}`;
       if (redirect_url) {
@@ -246,7 +246,7 @@ const createOrder = async (req, res) => {
     const redirectParams = (result) => redirect_url ? `${redirect_url}${redirect_url.includes('?') ? '&' : '?'}zp_order=${orderId}&zp_result=${result}` : undefined;
     
     if (isSystemCashier) {
-        let checkoutUrl = `https://zappay.shop/checkout.html?order_id=${orderId}&amount=${amt}&upi=${encodeURIComponent(sysAdminUser.fampay.upiId)}`;
+        let checkoutUrl = `https://zetpay.online/checkout.html?order_id=${orderId}&amount=${amt}&upi=${encodeURIComponent(sysAdminUser.fampay.upiId)}`;
         // Theme comes from merchantUser (whoever's ZapAPI key created this
         // order), not sysAdminUser — the checkout page shows to THIS
         // merchant's customer, so it should carry this merchant's branding

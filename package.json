@@ -1,7 +1,7 @@
-{
+﻿{
   "name": "zappay-backend",
   "version": "1.0.0",
-  "description": "ZapPay - Reseller Payment Link Platform Backend",
+  "description": "ZetPay - Reseller Payment Link Platform Backend",
   "main": "server.js",
   "scripts": {
     "start": "node server.js",

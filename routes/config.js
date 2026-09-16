@@ -1,4 +1,4 @@
-// routes/config.js
+﻿// routes/config.js
 // Public endpoint — serves CLIENT-SAFE config (Firebase web config + site name)
 // from Vercel environment variables, so the frontend never needs to
 // hardcode these values. Firebase client config is designed to be public
@@ -61,7 +61,7 @@ router.get('/', async (req, res) => {
     // on purpose — everything else keeps working without it, push
     // notifications just won't be offered until it's set.
     vapidKey: process.env.FCM_VAPID_KEY || '',
-    siteName: process.env.SITE_NAME || 'ZapPay',
+    siteName: process.env.SITE_NAME || 'ZetPay',
     socialLinks,
     maintenanceMode,
     supportEmail,

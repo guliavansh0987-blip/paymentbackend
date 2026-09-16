@@ -1,4 +1,4 @@
-// controllers/storePublicController.js - Store Portal (public, no auth)
+﻿// controllers/storePublicController.js - Store Portal (public, no auth)
 const { ref } = require('../firebase/admin');
 const zapService = require('../services/zapService');
 const firebaseService = require('../services/firebaseService');
@@ -141,7 +141,7 @@ const initiatePurchase = async (req, res) => {
       });
       const STORE_BASE = gatewayModeService.getStoreBase();
       const redirectUrl = `${STORE_BASE}/store=${storeId}?order=${orderId}`;
-      const checkoutUrl = `https://zappay.shop/checkout.html?order_id=${orderId}&amount=${amount}&upi=${encodeURIComponent(merchantUser.fampay.upiId)}&redirect_url=${encodeURIComponent(redirectUrl)}`;
+      const checkoutUrl = `https://zetpay.online/checkout.html?order_id=${orderId}&amount=${amount}&upi=${encodeURIComponent(merchantUser.fampay.upiId)}&redirect_url=${encodeURIComponent(redirectUrl)}`;
       return response.success(res, 'Purchase initiated via Cashier', {
         paymentUrl: checkoutUrl, orderId, amount, isTest: false, method: 'cashier',
       });
@@ -166,7 +166,7 @@ const initiatePurchase = async (req, res) => {
 
     if (isSystemCashier) {
       const safeRedirect = `${STORE_BASE}/store=${storeId}?order=${orderId}&result=success`;
-      const checkoutUrl = `https://zappay.shop/checkout.html?order_id=${orderId}&amount=${amount}&upi=${encodeURIComponent(sysAdminUser.fampay.upiId)}&redirect_url=${encodeURIComponent(safeRedirect)}`;
+      const checkoutUrl = `https://zetpay.online/checkout.html?order_id=${orderId}&amount=${amount}&upi=${encodeURIComponent(sysAdminUser.fampay.upiId)}&redirect_url=${encodeURIComponent(safeRedirect)}`;
       return response.success(res, 'Purchase initiated via System Cashier', { paymentUrl: checkoutUrl, orderId, amount, isTest: false, method: 'system_cashier' });
     }
 

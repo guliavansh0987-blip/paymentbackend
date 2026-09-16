@@ -1,14 +1,14 @@
-// services/emailService.js
+﻿// services/emailService.js
 // Sends transactional email (OTPs, etc.) through a cPanel mailbox via SMTP.
 //
 // Required env vars (set these in Vercel → Project → Settings → Environment
 // Variables, and in cPanel → Email Accounts for the mailbox itself):
-//   SMTP_HOST   e.g. zappay.shop        (cPanel → Email Accounts → Connect Devices, SSL/TLS section)
+//   SMTP_HOST   e.g. zetpay.online        (cPanel → Email Accounts → Connect Devices, SSL/TLS section)
 //   SMTP_PORT   465 (SSL) or 587 (STARTTLS)
 //   SMTP_SECURE 'true' for port 465, 'false' for port 587
-//   SMTP_USER   e.g. help@zappay.shop
+//   SMTP_USER   e.g. help@zetpay.online
 //   SMTP_PASS   the mailbox password (never commit this — env var only)
-//   SMTP_FROM_NAME  optional display name, defaults to 'ZapPay Gateway'
+//   SMTP_FROM_NAME  optional display name, defaults to 'ZetPay Gateway'
 const nodemailer = require('nodemailer');
 const logger = require('../utils/logger');
 
@@ -60,7 +60,7 @@ function escapeHtml(str) {
  * not the underlying template.
  */
 async function sendOtpEmail(toEmail, otp, name, purpose) {
-  const fromName = process.env.SMTP_FROM_NAME || 'ZapPay Gateway';
+  const fromName = process.env.SMTP_FROM_NAME || 'ZetPay Gateway';
   const fromAddress = process.env.SMTP_USER;
   const greetName = name ? escapeHtml(name) : 'there';
   const year = new Date().getFullYear();
@@ -69,7 +69,7 @@ async function sendOtpEmail(toEmail, otp, name, purpose) {
   const introLine = isReset
     ? 'Use this code to reset your password:'
     : 'Your verification code is:';
-  const subject = isReset ? 'Reset your ZapPay Gateway password' : 'OTP for your email';
+  const subject = isReset ? 'Reset your ZetPay Gateway password' : 'OTP for your email';
   const securityLine = isReset
     ? "If you didn't request a password reset, you can safely ignore this email."
     : 'Do not share this code with anyone.';
@@ -80,7 +80,7 @@ async function sendOtpEmail(toEmail, otp, name, purpose) {
 
       <!-- Header -->
       <div style="background:linear-gradient(135deg,#3d5afe,#1a2a8f);padding:26px 32px;">
-        <span style="color:#ffffff;font-size:20px;font-weight:700;letter-spacing:0.2px;">ZapPay Gateway</span>
+        <span style="color:#ffffff;font-size:20px;font-weight:700;letter-spacing:0.2px;">ZetPay Gateway</span>
       </div>
 
       <!-- Body -->
@@ -98,13 +98,13 @@ async function sendOtpEmail(toEmail, otp, name, purpose) {
 
       <!-- Footer -->
       <div style="background:#0d1220;padding:18px 32px;border-top:1px solid #1f2745;text-align:center;">
-        <p style="margin:0;color:#5c6284;font-size:12px;">© ${year} ZapPay Gateway. This is an automated message, please don't reply.</p>
+        <p style="margin:0;color:#5c6284;font-size:12px;">© ${year} ZetPay Gateway. This is an automated message, please don't reply.</p>
       </div>
 
     </div>
   </div>`;
 
-  const text = `Hi ${name || 'there'},\n\n${introLine} ${otp}\nIt expires in 5 minutes.\n${securityLine}\n\n© ${year} ZapPay Gateway`;
+  const text = `Hi ${name || 'there'},\n\n${introLine} ${otp}\nIt expires in 5 minutes.\n${securityLine}\n\n© ${year} ZetPay Gateway`;
 
   await getTransporter().sendMail({
     from: `"${fromName}" <${fromAddress}>`,

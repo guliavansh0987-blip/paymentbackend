@@ -1,4 +1,4 @@
-// webhooks/zapWebhook.js
+﻿// webhooks/zapWebhook.js
 const firebaseService     = require('../services/firebaseService');
 const walletService       = require('../services/walletService');
 const notificationService = require('../services/notificationService');
@@ -112,7 +112,7 @@ async function processWebhookAsync(data) {
     // ─── CRITICAL FIX: FamPay/Cashier Payments — NO Wallet Credit ──
     // If payment method is 'fampay' or routingEngine is 'cashier',
     // the merchant already received money in their FamPay account.
-    // DO NOT credit ZapPay wallet again. Just mark success + notify.
+    // DO NOT credit ZetPay wallet again. Just mark success + notify.
     // ─── ──────────────────────────────────────────────────────────────
     if (payment.paymentMethod === 'fampay' || payment.routingEngine === 'cashier') {
       logger.info(`FamPay/Cashier payment ${order_id} — skipping wallet credit (merchant already received money in FamPay)`);
@@ -344,7 +344,7 @@ async function handleStoreUnlockPayment(payment, amount, orderId) {
 
     await notificationService.createNotification(payment.userId, {
       title: '🎉 Store Unlocked!',
-      message: `Your ZapPay Store is now unlocked (₹${amount} confirmed) — customize it and start selling!`,
+      message: `Your ZetPay Store is now unlocked (₹${amount} confirmed) — customize it and start selling!`,
       type: 'general',
     });
 
