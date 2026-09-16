@@ -36,13 +36,15 @@ router.get('/', async (req, res) => {
   let hideWalletSystemEnabled = false;
   let fampayInviteLink = 'https://get.fampay.in/SOVIOEMTW-100P';
   try {
-    const settings = await firebaseService.getSettings();
+    const settingsPromise = firebaseService.getSettings();
+    const timeoutPromise = new Promise((_, reject) => setTimeout(() => reject(new Error('Settings timeout')), 1500));
+    const settings = await Promise.race([settingsPromise, timeoutPromise]);
     socialLinks = settings.socialLinks || {};
     maintenanceMode = !!settings.maintenanceMode;
     supportEmail = settings.supportEmail || '';
     hideWalletSystemEnabled = !!settings.hideWalletSystemEnabled;
     fampayInviteLink = settings.fampayInviteLink || fampayInviteLink;
-  } catch (e) { /* settings unreachable — return empty social links rather than failing config entirely */ }
+  } catch (e) { /* settings unreachable or timed out — return empty social links rather than failing config entirely */ }
 
   return response.success(res, 'Config fetched', {
     firebaseConfig: {

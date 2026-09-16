@@ -1,0 +1,24 @@
+{
+  "rules": {
+    ".read": true,
+    ".write": true,
+    "payments": {
+      ".indexOn": ["createdAt", "userId", "orderId", "status"]
+    },
+    "withdrawals": {
+      ".indexOn": ["createdAt", "userId", "status"]
+    },
+    "paymentLinks": {
+      ".indexOn": ["createdAt", "userId", "status"]
+    },
+    "activityLogs": {
+      ".indexOn": ["createdAt", "userId"]
+    },
+    "notifications": {
+      ".indexOn": ["createdAt", "userId"]
+    },
+    "users": {
+      ".indexOn": ["email", "role", "referralCode"]
+    }
+  }
+}

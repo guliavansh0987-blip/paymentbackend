@@ -143,7 +143,7 @@ Use at most one or two of these per answer, and only when it genuinely helps —
  */
 async function streamChat({ modelId, messages, thinking, onDelta, onReasoningDelta, signal }) {
   const cfg = getModelConfig(modelId);
-  const apiKey = process.env[cfg.apiKeyEnv];
+  const apiKey = process.env[cfg.apiKeyEnv] || process.env.NVIDIA_API_KEY;
   if (!apiKey) {
     throw new Error(`${cfg.label} is not configured yet (missing ${cfg.apiKeyEnv}).`);
   }
