@@ -144,6 +144,10 @@ const OPEN_CORS_PATHS = [
   // file describes for the earlier Developer Portal case).
   /^\/api\/payment-link\/order\//,
   /^\/api\/sms\/verify-manual/,
+  // checkout.html calls /api/imap/verify-status directly for IMAP-based
+  // payment verification (replaces the old verify_status.php). Same
+  // reasoning as payment-link/order above: public, no auth, no cookies.
+  /^\/api\/imap\//,
 ];
 
 app.use((req, res, next) => {
@@ -193,6 +197,7 @@ app.use('/api/sms',          require('./routes/sms'));
 app.use('/api/fampay',       require('./routes/fampay'));
 app.use('/api/paytm',        require('./routes/paytm'));
 app.use('/api/history',      require('./routes/history'));
+app.use('/api/imap',         require('./routes/imap'));
 
 
 // ── Error Handlers ──
@@ -205,7 +210,7 @@ app.use(errorHandler);
 // Vercel uses the exported app directly in serverless mode
 const PORT = process.env.PORT || 3000;
 
-if (process.env.NODE_ENV !== 'production') {
+if (require.main === module || process.env.NODE_ENV !== 'production') {
   // Local development only
   app.listen(PORT, () => {
     logger.info(`🚀 ZapPay running on http://localhost:${PORT}`);

@@ -17,15 +17,13 @@
 // whichever account in fampayAccounts is currently isActive — so
 // switching the active account here transparently changes what every one
 // of those existing routes uses, with zero changes needed there.
-const axios = require('axios');
-const encryption = require('../utils/encryption');
-const response = require('../helpers/response');
+const encryption   = require('../utils/encryption');
+const response     = require('../helpers/response');
 const firebaseService = require('../services/firebaseService');
-const { ref } = require('../firebase/admin');
+const imapService  = require('../services/imapService');
+const { ref }      = require('../firebase/admin');
 const { DB_PATHS } = require('../config/constants');
-const logger = require('../utils/logger');
-
-const HISTORY_API_URL = 'https://zappay.shop/history.php';
+const logger       = require('../utils/logger');
 const MAX_ACCOUNTS = 3;
 
 // 4-digit numeric id, unique within this merchant's own account list —
@@ -184,9 +182,9 @@ const verifyFampayAccount = async (req, res) => {
       return response.error(res, 'Account not found', 404);
     }
 
-    const apiRes = await axios.post(HISTORY_API_URL, { email, pass: password, limit: 1 });
-    if (!apiRes.data || !apiRes.data.status) {
-      const detail = (apiRes.data && (apiRes.data.error || apiRes.data.raw_error)) || 'IMAP Auth failed.';
+    const apiRes = await imapService.getHistory(email, password, 1);
+    if (!apiRes.status) {
+      const detail = apiRes.error || apiRes.raw_error || 'IMAP Auth failed.';
       return response.error(res, 'Invalid Email or App Password: ' + detail, 400);
     }
 
@@ -314,17 +312,13 @@ const getHistory = async (req, res) => {
       return response.error(res, 'Failed to decrypt app password. Please reconnect FamPay.', 400);
     }
 
-    const apiRes = await axios.post(HISTORY_API_URL, {
-      email: user.fampay.email,
-      pass: rawPassword,
-      limit: 15
-    });
+    const apiRes = await imapService.getHistory(user.fampay.email, rawPassword, 15);
 
-    if (!apiRes.data || !apiRes.data.status) {
-      return response.error(res, apiRes.data?.error || 'Failed to fetch emails from server.', 400);
+    if (!apiRes.status) {
+      return response.error(res, apiRes.error || 'Failed to fetch emails from server.', 400);
     }
 
-    return response.success(res, 'History fetched', apiRes.data.data);
+    return response.success(res, 'History fetched', apiRes.data);
   } catch (err) {
     logger.error('Fetch History Error:', err.message);
     return response.serverError(res, 'Error fetching history: ' + err.message);

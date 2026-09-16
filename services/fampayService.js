@@ -1,27 +1,15 @@
 // services/fampayService.js
-const axios = require('axios');
-const firebaseService = require('./firebaseService');
-const walletService = require('./walletService');
-const webhookService = require('./webhookService');
+const imapService         = require('./imapService');
+const { parseTxnDatetime } = imapService;
+const firebaseService     = require('./firebaseService');
+const walletService       = require('./walletService');
+const webhookService      = require('./webhookService');
 const notificationService = require('./notificationService');
-const encryption = require('../utils/encryption');
-const logger = require('../utils/logger');
-const { ref } = require('../firebase/admin');
-const { DB_PATHS } = require('../config/constants');
+const encryption          = require('../utils/encryption');
+const logger              = require('../utils/logger');
+const { ref }             = require('../firebase/admin');
+const { DB_PATHS }        = require('../config/constants');
 
-const HISTORY_API_URL = 'https://zappay.shop/history.php';
-
-// history.php's date field is "datetime" (a formatted string like
-// "26-08-2026 15:50:00", d-m-Y H:i:s) — not "timestamp". Both
-// verifyPayment and checkUtrForOrder below need this to compare a
-// transaction's time against the order's creation time.
-function parseTxnDatetime(str) {
-    if (!str || typeof str !== 'string') return null;
-    const m = str.match(/^(\d{2})-(\d{2})-(\d{4})\s+(\d{2}):(\d{2}):(\d{2})$/);
-    if (!m) return null;
-    const [, dd, mm, yyyy, hh, min, ss] = m;
-    return new Date(`${yyyy}-${mm}-${dd}T${hh}:${min}:${ss}`).getTime();
-}
 
 const verifyPayment = async (orderId) => {
   try {
@@ -35,18 +23,10 @@ const verifyPayment = async (orderId) => {
     const rawPassword = encryption.decrypt(user.fampay.password);
     if (!rawPassword) return false;
 
-    const response = await axios.post(HISTORY_API_URL, {
-      email: user.fampay.email,
-      pass: rawPassword,
-      limit: 15
-    });
+    const histResult = await imapService.getHistory(user.fampay.email, rawPassword, 15);
+    if (!histResult.status) return false;
 
-    // history.php's success flag is named "status", not "success" —
-    // this check always rejected a genuinely successful response
-    // before ever reaching the transaction-matching loop below.
-    if (!response.data || !response.data.status) return false;
-
-    const transactions = response.data.data || [];
+    const transactions = histResult.data || [];
     const paymentAmount = parseFloat(payment.amount);
     // payment.createdAt comes from Firebase's serverTimestamp() — by the
     // time this read happens it has resolved to a plain number
@@ -220,16 +200,10 @@ async function checkUtrForOrder(orderId, identifier) {
     const rawPassword = encryption.decrypt(user.fampay.password);
     if (!rawPassword) return false;
 
-    const response = await axios.post(HISTORY_API_URL, {
-      email: user.fampay.email,
-      pass: rawPassword,
-      limit: 20
-    });
-    // Same field-name fix as verifyPayment above — history.php returns
-    // "status", not "success".
-    if (!response.data || !response.data.status) return false;
+    const histResult = await imapService.getHistory(user.fampay.email, rawPassword, 20);
+    if (!histResult.status) return false;
 
-    const transactions = response.data.data || [];
+    const transactions = histResult.data || [];
     const paymentAmount = parseFloat(payment.amount);
     const orderCreatedAt = typeof payment.createdAt === 'number' ? payment.createdAt : Date.parse(payment.createdAt) || 0;
     const identifierTrimmed = identifier.trim();
